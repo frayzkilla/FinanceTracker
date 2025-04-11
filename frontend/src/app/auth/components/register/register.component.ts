@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { HttpClient } from '@angular/common/http';
 
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+
 import {
   faEnvelope,
   faLock,

@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+
 <form
   [formGroup]="registerForm"
   (ngSubmit)="onSubmit()"
@@ -8,7 +10,10 @@
   <div class="flex flex-col space-y-1">
     <label for="email" class="text-sm font-medium text-gray-700">Email</label>
     <div class="relative">
-      <fa-icon [icon]="faEnvelope" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></fa-icon>
+      <fa-icon
+        [icon]="faEnvelope"
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+      ></fa-icon>
       <input
         type="email"
         id="email"
@@ -18,7 +23,9 @@
       />
     </div>
     <div
-      *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+      *ngIf="
+        registerForm.get('email')?.invalid && registerForm.get('email')?.touched
+      "
       class="text-red-500 text-sm"
     >
       Email is invalid
@@ -26,9 +33,14 @@
   </div>
 
   <div class="flex flex-col space-y-1">
-    <label for="password" class="text-sm font-medium text-gray-700">Пароль</label>
+    <label for="password" class="text-sm font-medium text-gray-700"
+      >Пароль</label
+    >
     <div class="relative">
-      <fa-icon [icon]="faLock" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></fa-icon>
+      <fa-icon
+        [icon]="faLock"
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+      ></fa-icon>
       <input
         type="password"
         id="password"
@@ -38,7 +50,10 @@
       />
     </div>
     <div
-      *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+      *ngIf="
+        registerForm.get('password')?.invalid &&
+        registerForm.get('password')?.touched
+      "
       class="text-red-500 text-sm"
     >
       Password is required and must be at least 6 characters

@@ -1,0 +1,41 @@
+<app-navbar></app-navbar>
+<div class="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-xl space-y-6">
+  <h2 class="text-3xl font-bold text-gray-800">Мой портфель</h2>
+
+  <!-- Общая информация -->
+  <div class="flex justify-between items-center text-lg">
+    <p>
+      Общая стоимость:
+      <span class="font-semibold text-green-600"
+        >{{ totalValue | number : "1.2-2" }} ₽</span
+      >
+    </p>
+    <p>
+      Активов: <span class="font-semibold">{{ assets.length }}</span>
+    </p>
+  </div>
+
+  <!-- Таблица активов -->
+  <div class="overflow-x-auto">
+    <table class="w-full table-auto text-left border">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2">Название</th>
+          <th class="px-4 py-2">Кол-во</th>
+          <th class="px-4 py-2">Цена</th>
+          <th class="px-4 py-2">Стоимость</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let asset of assets" class="border-t">
+          <td class="px-4 py-2">{{ asset.name }}</td>
+          <td class="px-4 py-2">{{ asset.amount }}</td>
+          <td class="px-4 py-2">{{ asset.price | number : "1.2-2" }} ₽</td>
+          <td class="px-4 py-2">
+            {{ asset.amount * asset.price | number : "1.2-2" }} ₽
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
