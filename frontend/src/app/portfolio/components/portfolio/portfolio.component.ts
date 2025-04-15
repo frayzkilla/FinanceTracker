@@ -3,6 +3,7 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar.compon
 
 @Component({
   selector: 'app-portfolio',
+  styleUrls: ['./portfolio.component.scss'],
   templateUrl: './portfolio.component.html',
 })
 export class PortfolioComponent implements OnInit {

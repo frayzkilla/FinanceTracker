@@ -68,4 +68,12 @@
     <fa-icon [icon]="faUserPlus" class="mr-2"></fa-icon>
     Зарегистрироваться
   </button>
+  <button
+    [routerLink]="['/auth/login']"
+    routerLinkActive="active-link"
+    type="button"
+    class="w-full bg-blue-900 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+  >
+    Войти
+  </button>
 </form>

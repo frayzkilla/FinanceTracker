@@ -1,1 +1,76 @@
-<p>login works!</p>
+<app-navbar></app-navbar>
+
+<form
+  [formGroup]="loginForm"
+  (ngSubmit)="onSubmit()"
+  class="max-w-md mx-auto p-6 bg-white rounded-2xl shadow-2xl space-y-6"
+>
+  <h2 class="text-2xl font-bold text-gray-800 text-center">Вход</h2>
+
+  <div class="flex flex-col space-y-1">
+    <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+    <div class="relative">
+      <fa-icon
+        [icon]="faEnvelope"
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+      ></fa-icon>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="you@example.com"
+      />
+    </div>
+    <div
+      *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+      class="text-red-500 text-sm"
+    >
+      Email is invalid
+    </div>
+  </div>
+
+  <div class="flex flex-col space-y-1">
+    <label for="password" class="text-sm font-medium text-gray-700"
+      >Пароль</label
+    >
+    <div class="relative">
+      <fa-icon
+        [icon]="faLock"
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+      ></fa-icon>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="••••••••"
+      />
+    </div>
+    <div
+      *ngIf="
+        loginForm.get('password')?.invalid && loginForm.get('password')?.touched
+      "
+      class="text-red-500 text-sm"
+    >
+      Password is required and must be at least 6 characters
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="loginForm.invalid"
+    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+  >
+    <fa-icon [icon]="faUserPlus" class="mr-2"></fa-icon>
+    Войти
+  </button>
+  <button
+    [routerLink]="['/auth/register']"
+    routerLinkActive="active-link"
+    type="button"
+    class="w-full bg-blue-900 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+  >
+    Регистрация
+  </button>
+</form>
