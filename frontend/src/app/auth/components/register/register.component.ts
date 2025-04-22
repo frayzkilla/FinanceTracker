@@ -10,6 +10,8 @@ import {
   faLock,
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +24,7 @@ export class RegisterComponent {
 
   registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -33,16 +35,15 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       const formData = this.registerForm.value;
 
-      this.http
-        .post('http://localhost:3000/users/adduser', formData)
-        .subscribe({
-          next: (response) => {
-            console.log('Успешно отправлено!', response);
-          },
-          error: (error) => {
-            console.error('Ошибка при отправке:', error);
-          },
-        });
+      this.authService.register(formData).subscribe({
+        next: (response) => {
+          console.log('Успешно отправлено!', response);
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          console.error('Ошибка при отправке:', error);
+        },
+      });
     }
   }
 }
