@@ -11,6 +11,7 @@ import {
   faLock,
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private authService: AuthService, private fb: FormBuilder, private http: HttpClient) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -35,7 +36,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
 
-      this.http.post('http://localhost:3000/users/login', formData).subscribe({
+      this.authService.login(formData).subscribe({
         next: (response) => {
           console.log('Успешно отправлено!', response);
         },

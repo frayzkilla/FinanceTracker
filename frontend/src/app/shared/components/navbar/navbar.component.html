@@ -4,7 +4,7 @@
     <li><a routerLink="/" class="hover:underline">Главная</a></li>
     <li><a routerLink="/portfolio" class="hover:underline">Портфель</a></li>
     <li *ngIf="!auth.isAuthenticated()">
-      <a routerLink="auth/login" class="hover:underline">Войти</a>
+      <a routerLink="/auth/login" class="hover:underline">Войти</a>
     </li>
   </ul>
 </nav>
