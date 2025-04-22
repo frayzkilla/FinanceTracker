@@ -6,5 +6,8 @@
     <li *ngIf="!auth.isAuthenticated()">
       <a routerLink="/auth/login" class="hover:underline">Войти</a>
     </li>
+    <li *ngIf="auth.isAuthenticated()">
+      <a (click)="logout()" class="hover:underline cursor-pointer">Выйти</a>
+    </li>
   </ul>
 </nav>

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { HttpClient } from '@angular/common/http';
-
+import { Router } from '@angular/router';
 
 import {
   faEnvelope,
@@ -25,7 +25,12 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private authService: AuthService, private fb: FormBuilder, private http: HttpClient) {
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -39,6 +44,7 @@ export class LoginComponent {
       this.authService.login(formData).subscribe({
         next: (response) => {
           console.log('Успешно отправлено!', response);
+          this.router.navigate(['/']);
         },
         error: (error) => {
           console.error('Ошибка при отправке:', error);
