@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PortfolioRoutingModule } from './portfolio-routing.module';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { SharedModule } from '../shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     PortfolioRoutingModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule,
   ]
 })
 export class PortfolioModule { }
