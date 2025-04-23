@@ -23,8 +23,17 @@
     </p>
   </div>
 
+  <div
+    *ngIf="assets.length == 0"
+    class="flex items-center justify-center h-64 bg-gray-50 rounded-2xl border border-dashed border-gray-300"
+  >
+    <p class="text-gray-500 text-lg">
+      Добавьте свой первый актив, чтобы начать отслеживать портфель!
+    </p>
+  </div>
+
   <!-- Таблица активов -->
-  <div class="overflow-x-auto">
+  <div *ngIf="assets.length != 0" class="overflow-x-auto">
     <table class="w-full table-auto text-left border">
       <thead class="bg-gray-100">
         <tr>
