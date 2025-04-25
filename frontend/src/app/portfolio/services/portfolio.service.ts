@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -5,5 +6,26 @@ import { Injectable } from '@angular/core';
 })
 export class PortfolioService {
 
-  constructor() { }
+  private stocksList: any[] = [];
+  private getStocksUrl = 'http://localhost:3000/stocks/getlist';
+
+  constructor(private http: HttpClient) { }
+
+  loadStockSymbols() {
+    this.stocksList = ['BTC', 'ETH', 'AAPL', 'GOOGL', 'AMZN'];
+    // this.http.get<any[]>(this.getStocksUrl).subscribe(data => {
+    //   this.stocksList = data;
+    // });
+  }
+
+  searchStockSymbols(query: string) {
+    return this.stocksList.filter(symbol => 
+      symbol.code.includes(query.toUpperCase()) || 
+      symbol.name.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  async isSymbolValid(symbol: string) {
+    return this.stocksList.some(s => s.code === symbol);
+  }
 }

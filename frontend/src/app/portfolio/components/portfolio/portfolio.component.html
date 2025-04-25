@@ -65,50 +65,67 @@
     </table>
   </div>
 
-  <!-- Модалка -->
-  <div
-    *ngIf="isModalOpen"
-    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-  >
-    <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl space-y-4">
-      <h3 class="text-xl font-semibold text-gray-800">Добавить актив</h3>
+ <!-- Модалка -->
+ <div
+ *ngIf="isModalOpen"
+ class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+>
+ <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl space-y-4">
+   <h3 class="text-xl font-semibold text-gray-800">Добавить актив</h3>
 
-      <form [formGroup]="assetForm" (ngSubmit)="submitAsset()">
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium">Название</label>
-            <input
-              type="text"
-              formControlName="name"
-              class="w-full border rounded-xl px-3 py-2"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium">Количество</label>
-            <input
-              type="number"
-              formControlName="amount"
-              class="w-full border rounded-xl px-3 py-2"
-            />
-          </div>
-        </div>
+   <form [formGroup]="assetForm" (ngSubmit)="submitAsset()">
+     <div class="space-y-4">
+       <div>
+         <label class="block text-sm font-medium">Название</label>
+         <!-- Поле поиска для символов -->
+         <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Поиск актива</mat-label>
+          <input 
+            matInput
+            [formControl]="searchControl"
+            placeholder="Начните вводить название или тикер"
+          >
+        </mat-form-field>
 
-        <div class="mt-6 flex justify-end space-x-2">
-          <button
-            type="button"
-            (click)="closeModal()"
-            class="px-4 py-2 rounded-xl border border-green-600 text-green-700 hover:bg-green-100 transition"
-          >
-            Отмена
-          </button>
-          <button
-            type="submit"
-            class="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition"
-          >
-            Добавить
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+         <!-- Список найденных символов -->
+         <mat-form-field appearance="fill" class="w-full mt-2">
+          <mat-label>Выберите актив</mat-label>
+          <mat-select formControlName="name">
+            <mat-option 
+              *ngFor="let symbol of filteredSymbols" 
+              [value]="symbol.code"
+            >
+              {{ symbol.code }} — {{ symbol.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+       </div>
+       <div>
+         <label class="block text-sm font-medium">Количество</label>
+         <input
+           type="number"
+           formControlName="amount"
+           class="w-full border rounded-xl px-3 py-2"
+         />
+       </div>
+     </div>
+
+     <div class="mt-6 flex justify-end space-x-2">
+       <button
+         type="button"
+         (click)="closeModal()"
+         class="px-4 py-2 rounded-xl border border-green-600 text-green-700 hover:bg-green-100 transition"
+       >
+         Отмена
+       </button>
+       <button
+         type="submit"
+         class="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition"
+       >
+         Добавить
+       </button>
+     </div>
+   </form>
+ </div>
+</div>
 </div>

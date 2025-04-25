@@ -4,7 +4,11 @@ import { CommonModule } from '@angular/common';
 import { PortfolioRoutingModule } from './portfolio-routing.module';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { SharedModule } from '../shared/shared.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 
 
 @NgModule({
@@ -14,6 +18,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     PortfolioRoutingModule,
     SharedModule,
     ReactiveFormsModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
   ]
 })
 export class PortfolioModule { }
