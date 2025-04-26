@@ -11,4 +11,13 @@ export class StocksController {
     const price = await this.stockService.getStockPrice(ticker);
     return { ticker, price };
   }
+
+  @Get('getstockslist')
+  async getStocksList(): Promise<{ code: string; name: string }[]> {
+    try {
+      return this.stockService.getStocksList();
+    } catch (error) {
+      throw new HttpException('Error loading stocks list', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
