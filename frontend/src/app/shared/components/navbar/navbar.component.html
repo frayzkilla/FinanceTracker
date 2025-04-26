@@ -1,6 +1,6 @@
 <nav class="bg-gray-800 text-white p-4 flex justify-between items-center">
   <div class="text-xl font-bold">Finance Tracker</div>
-  <ul class="flex gap-4">
+  <ul class="flex gap-4 items-center">
     <li><a routerLink="/" class="hover:underline">Главная</a></li>
     <li *ngIf="auth.isAuthenticated()">
       <a routerLink="/portfolio" class="hover:underline">Портфель</a>
@@ -8,7 +8,8 @@
     <li *ngIf="!auth.isAuthenticated()">
       <a routerLink="/auth/login" class="hover:underline">Войти</a>
     </li>
-    <li *ngIf="auth.isAuthenticated()">
+    <li *ngIf="auth.isAuthenticated()" class="flex items-center gap-2">
+      <span class="text-gray-300">{{ auth.userEmail }}</span> 
       <a (click)="logout()" class="hover:underline cursor-pointer">Выйти</a>
     </li>
   </ul>
