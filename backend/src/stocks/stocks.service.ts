@@ -84,4 +84,11 @@ export class StocksService {
 
     return await this.stockRepository.save(stock);
   }
+
+  async getStocksByUser(userId: number) {
+    return this.stockRepository.find({
+      where: { owner: { id: userId } },
+      relations: ['owner'],
+    });
+  }
 }
