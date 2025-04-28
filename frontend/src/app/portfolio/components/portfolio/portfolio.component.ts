@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { PortfolioService } from '../../services/portfolio.service';
 import { debounceTime, filter } from 'rxjs';
+import { AuthService } from '../../../auth/services/auth.service';
+import { Stock } from '../../interfaces/stock.interface';
 
 @Component({
   selector: 'app-portfolio',
@@ -12,18 +19,15 @@ export class PortfolioComponent implements OnInit {
   searchControl = new FormControl('');
   filteredSymbols: any[] = [];
 
-  assets = [
-    { name: 'Bitcoin', amount: 0.5, price: 4000000 },
-    { name: 'Apple', amount: 10, price: 19000 },
-    { name: 'Ethereum', amount: 2, price: 250000 },
-  ];
+  assets: Stock[] = [];
 
   isModalOpen = false;
   assetForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private portfolioService: PortfolioService
+    private portfolioService: PortfolioService,
+    private authService: AuthService
   ) {
     this.assetForm = this.fb.group({
       name: ['', Validators.required],
@@ -37,10 +41,23 @@ export class PortfolioComponent implements OnInit {
   totalValue = 0;
 
   ngOnInit(): void {
+    this.portfolioService.loadStockSymbols();
+
+    const token = this.authService.getToken();
+    if (token) {
+      this.portfolioService.loadUserAssets(token);
+    }
+
+    // Подписываемся на поток активов
+    this.portfolioService.assets$.subscribe((assets) => {
+      this.assets = assets;
+      this.updateTotalValue();
+    });
+
     this.searchControl.valueChanges
       .pipe(
         debounceTime(300),
-        filter((value): value is string => value !== null) // Игнорируем null значения
+        filter((value): value is string => value !== null)
       )
       .subscribe((value: string) => {
         this.filteredSymbols = this.portfolioService.searchStockSymbols(value);
@@ -52,10 +69,9 @@ export class PortfolioComponent implements OnInit {
     );
     this.pieChartLabels = this.assets.map((a) => a.name);
     this.pieChartData = this.assets.map((a) => a.amount * a.price);
-    this.portfolioService.loadStockSymbols();
+
     setTimeout(() => {
-      // Защищенный доступ к списку акций
-      this.filteredSymbols = [...this.portfolioService?.['stocksList'] || []];
+      this.filteredSymbols = [...(this.portfolioService?.['stocksList'] || [])];
     }, 300);
   }
 

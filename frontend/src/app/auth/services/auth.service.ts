@@ -13,13 +13,18 @@ export class AuthService {
   private registerUrl = 'http://localhost:3000/auth/register';
   userEmail: string | null = null;
 
-
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.loadUserFromToken();
-    console.log(this.getToken())
+    const token = this.getToken();
+    if (token) {
+      console.log(jwtDecode(token), 'токен в конструкторе');
+    } else {
+      console.log('токен не найден в конструкторе');
+    }
+    console.log(this.getToken(), 'токен в конструкторе');
   }
 
   private loadUserFromToken() {
@@ -35,14 +40,16 @@ export class AuthService {
   }
 
   login(credentials: { email: string; password: string }): Observable<void> {
-    return this.http.post<{ access_token: string }>(this.loginUrl, credentials).pipe(
-      tap((response) => {
-        localStorage.setItem(this.tokenKey, response.access_token);
-        console.log(jwtDecode(response.access_token))
-        this.loadUserFromToken(); // после логина тоже грузим email
-      }),
-      mapTo(void 0)
-    );
+    return this.http
+      .post<{ access_token: string }>(this.loginUrl, credentials)
+      .pipe(
+        tap((response) => {
+          localStorage.setItem(this.tokenKey, response.access_token);
+          console.log(jwtDecode(response.access_token));
+          this.loadUserFromToken(); // после логина тоже грузим email
+        }),
+        mapTo(void 0)
+      );
   }
 
   logout() {
@@ -53,12 +60,15 @@ export class AuthService {
   }
 
   register(credentials: { email: string; password: string }): Observable<void> {
-    return this.http.post<{ access_token: string }>(this.registerUrl, credentials).pipe(
-      tap((response) => localStorage.setItem(this.tokenKey, response.access_token)),
-      mapTo(void 0)
-    );
+    return this.http
+      .post<{ access_token: string }>(this.registerUrl, credentials)
+      .pipe(
+        tap((response) =>
+          localStorage.setItem(this.tokenKey, response.access_token)
+        ),
+        mapTo(void 0)
+      );
   }
-
 
   getToken(): string | null {
     if (isPlatformBrowser(this.platformId)) {
@@ -72,4 +82,3 @@ export class AuthService {
     return !!this.getToken();
   }
 }
-
