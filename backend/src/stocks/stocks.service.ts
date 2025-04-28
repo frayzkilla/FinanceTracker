@@ -86,9 +86,21 @@ export class StocksService {
   }
 
   async getStocksByUser(userId: number) {
-    return this.stockRepository.find({
+    const stocks = this.stockRepository.find({
       where: { owner: { id: userId } },
       relations: ['owner'],
     });
+
+    const stocksWithPrices = await Promise.all(
+      (await stocks).map(async (stock) => {
+        const price = await this.getStockPrice(stock.code);
+        return {
+          ...stock,
+          price,
+        };
+      }),
+    );
+  
+    return stocksWithPrices;
   }
 }

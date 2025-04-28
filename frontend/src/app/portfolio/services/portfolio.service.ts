@@ -35,6 +35,13 @@ export class PortfolioService {
     return this.stocksList.some((s) => s.code === symbol);
   }
 
+  getStockPrice(symbol: string): Observable<number> {
+    return this.http.get<{ price: number }>(`${this.apiUrl}/stocks/price?ticker=${symbol}`)
+      .pipe(
+        map(response => response.price)
+      );
+  }
+
   getRawUserStocks(token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -49,8 +56,8 @@ export class PortfolioService {
         return stocks.map((stock: any) => ({
           name: stock.code,
           amount: stock.amount,
-          price: 0,
-        }));
+          price: stock.price,
+        }));  
       })
     );
   }
