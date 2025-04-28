@@ -1,6 +1,7 @@
-import { Controller, Query } from '@nestjs/common';
+import { Body, Controller, Post, Query } from '@nestjs/common';
 import { Get, HttpException, HttpStatus, Param } from '@nestjs/common';
 import { StocksService } from './stocks.service';
+import { CreateStockDto } from 'src/dto/create-stock.dto';
 
 @Controller('stocks')
 export class StocksController {
@@ -19,5 +20,10 @@ export class StocksController {
     } catch (error) {
       throw new HttpException('Error loading stocks list', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  @Post('createuserstock')
+  create(@Body() createStockDto: CreateStockDto) {
+    return this.stockService.createUserStock(createStockDto);
   }
 }

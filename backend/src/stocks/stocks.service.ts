@@ -1,15 +1,29 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import axios from 'axios';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import * as Papa from 'papaparse';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Stock } from './stock.entity';
+import { User } from 'src/users/user.entity';
+import { Repository } from 'typeorm';
+import { CreateStockDto } from 'src/dto/create-stock.dto';
 
 @Injectable()
 export class StocksService {
   private readonly apiKey = 'J4ETZSKJ2DM6PW9C';
   private stocksList: { code: string; name: string }[] = [];
 
-  constructor() {
+  constructor(
+    @InjectRepository(Stock)
+    private stockRepository: Repository<Stock>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {
     this.loadStocksCsv();
   }
 
@@ -23,12 +37,21 @@ export class StocksService {
       }
       return price;
     } catch (error) {
-      throw new InternalServerErrorException('Ошибка при получении цены актива');
+      throw new InternalServerErrorException(
+        'Ошибка при получении цены актива',
+      );
     }
   }
 
   async loadStocksCsv() {
-    const filePath = join(__dirname, '..', '..', 'src', 'assets', 'digital_currency_list.csv');
+    const filePath = join(
+      __dirname,
+      '..',
+      '..',
+      'src',
+      'assets',
+      'digital_currency_list.csv',
+    );
     const fileContent = await readFile(filePath, 'utf-8');
     const parsed = Papa.parse(fileContent, {
       header: true,
@@ -44,5 +67,21 @@ export class StocksService {
   getStocksList() {
     return this.stocksList;
   }
-  
+
+  async createUserStock(createStockDto: CreateStockDto): Promise<Stock> {
+    const { userId, code, amount } = createStockDto;
+
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const stock = this.stockRepository.create({
+      code,
+      amount,
+      owner: user,
+    });
+
+    return await this.stockRepository.save(stock);
+  }
 }
